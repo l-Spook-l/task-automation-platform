@@ -26,8 +26,16 @@ class TaskService:
 
         return task
 
-    def update_task(self, task_id: int, data: TaskUpdate) -> dict:
-        pass
+    def update_task(self, task_id: int, data: TaskUpdate) -> TaskResponse | None:
+        if task_id not in self.tasks:
+            return None
 
-    def delete_task(self, task_id: int) -> dict:
-        pass
+        task = self.tasks[task_id]
+        update_data = data.model_dump(exclude_unset=True)
+        updated_task = task.model_copy(update=update_data)
+        self.tasks[task_id] = updated_task
+
+        return updated_task
+
+    def delete_task(self, task_id: int) -> TaskResponse | None:
+        return self.tasks.pop(task_id, None)
