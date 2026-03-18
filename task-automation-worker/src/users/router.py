@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from src.users.tasks import fetch_and_save_users
 
 router = APIRouter(
     prefix="/users",
@@ -9,4 +10,5 @@ router = APIRouter(
 
 @router.post("/fetch-users")
 def fetch_users():
-    pass
+    task = fetch_and_save_users.delay()
+    return {"task_id": task.id, "status": "started"}
