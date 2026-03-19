@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from src.users.tasks import fetch_and_save_users
 
@@ -10,5 +10,8 @@ router = APIRouter(
 
 @router.post("/fetch-users")
 def fetch_users():
-    task = fetch_and_save_users.delay()
-    return {"task_id": task.id, "status": "started"}
+    try:
+        task = fetch_and_save_users.delay()
+        return {"task_id": task.id, "status": "started"}
+    except Exception:
+        raise HTTPException(status_code=500, detail="Failed to start task")
