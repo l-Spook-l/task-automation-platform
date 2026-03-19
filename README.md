@@ -103,12 +103,21 @@ RESTful API for managing tasks (to-do list).
 
 ---
 
-## ▶️ Run Task Manager API
+## ▶️ Run locally
 
 ```bash
 cd task-manager-api
 uv run uvicorn src.main:app --reload
 ```
+
+## ▶️ Run with Docker
+
+```bash
+docker build -t task-manager-api -f task-manager-api/Dockerfile . 
+docker run -d --name task-manager-api -p 8000:8000 task-manager-api 
+docker stop task-manager-api
+```
+
 
 Docs:
 
@@ -150,7 +159,7 @@ Simple ML pipeline for text classification:
 
 ```bash
 cd task-ml-service
-uv run python src.ml.train_model
+uv run python -m src.ml.train_model
 ```
 
 ---
@@ -159,6 +168,14 @@ uv run python src.ml.train_model
 
 ```bash
 uv run uvicorn src.main:app --reload
+```
+
+## ▶️ Run with Docker
+
+```bash
+docker build -t task-ml-service -f task-ml-service/Dockerfile . 
+docker run -d --name task-ml-service -p 8000:8000 task-ml-service 
+docker stop task-ml-service
 ```
 
 ---
@@ -184,6 +201,26 @@ Response:
   "priority": "high"
 }
 ```
+
+---
+
+## ⚡ Design Decisions
+
+### Why no async?
+
+Asynchronous programming was intentionally not used in most parts of this project.
+
+**Reasoning:**
+
+1. **Task 1** uses Celery, which already handles background processing and removes the need for async in the API layer.
+
+2. **Task 2** works with in-memory data (no I/O operations), so async would not provide any performance benefit.
+
+3. **Task 3:**
+   - model inference is CPU-bound and fast
+   - model training is CPU-bound and does not benefit from async
+
+In all cases, adding async would increase complexity without improving performance.
 
 ---
 
