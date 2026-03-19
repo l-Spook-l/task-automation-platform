@@ -1,8 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class TaskRequest(BaseModel):
-    description: str
+    description: str = Field(min_length=3)
 
 
 class TaskPriorityResponse(BaseModel):
