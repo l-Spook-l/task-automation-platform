@@ -1,6 +1,9 @@
+import logging
 from typing import Dict
 
 from src.tasks.schemas import TaskResponse, TaskCreate, TaskUpdate
+
+logger = logging.getLogger(__name__)
 
 
 class TaskService:
@@ -38,4 +41,7 @@ class TaskService:
         return updated_task
 
     def delete_task(self, task_id: int) -> TaskResponse | None:
-        return self.tasks.pop(task_id, None)
+        task = self.tasks.pop(task_id, None)
+        if not task:
+            logger.warning(f"Task {task_id} not found for deletion")
+        return task
