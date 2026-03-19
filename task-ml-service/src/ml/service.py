@@ -1,7 +1,10 @@
+import logging
 import os
 import joblib
 
 from src.ml.config import MODEL_PATH
+
+logger = logging.getLogger(__name__)
 
 
 class TaskPriorityMLService:
@@ -12,6 +15,7 @@ class TaskPriorityMLService:
     def _load_model():
         if os.path.exists(MODEL_PATH):
             return joblib.load(MODEL_PATH)
+        logger.exception("Model file not found")
         raise RuntimeError("Model not trained")
 
     def predict_priority(self, description: str) -> str:

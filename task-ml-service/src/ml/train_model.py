@@ -1,3 +1,5 @@
+import logging
+
 import pandas as pd
 import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -7,6 +9,8 @@ from sklearn.pipeline import Pipeline
 from src.ml.config import CSV_PATH, MODEL_PATH, MODEL_DIR
 
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
+
+logger = logging.getLogger(__name__)
 
 
 def train_model(csv_path="tasks.csv", model_path="model.joblib"):
@@ -37,7 +41,7 @@ def train_model(csv_path="tasks.csv", model_path="model.joblib"):
     # 5. Save trained model
     joblib.dump(model, model_path)
 
-    print(f"Model trained and saved to: {model_path}")
+    logger.info(f"Model trained and saved to: {model_path}")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.ml.dependencies import get_ml_service
@@ -5,6 +7,8 @@ from src.ml.schemas import TaskRequest, TaskPriorityResponse
 from src.ml.service import TaskPriorityMLService
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
+
+logger = logging.getLogger(__name__)
 
 
 @router.post("/predict", response_model=TaskPriorityResponse)
@@ -21,4 +25,5 @@ def predict(
         )
 
     except Exception:
+        logger.exception("Prediction failed")
         raise HTTPException(status_code=500, detail="Prediction failed")
