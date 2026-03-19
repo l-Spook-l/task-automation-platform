@@ -1,5 +1,3 @@
-import os
-
 import pandas as pd
 import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -24,7 +22,7 @@ def train_model(csv_path="tasks.csv", model_path="model.joblib"):
     df = pd.read_csv(csv_path)
 
     # 2. Split features and target
-    X = df["task_description"]
+    x = df["task_description"]
     y = df["priority"]
 
     # 3. Create pipeline: text vectorization + classifier
@@ -34,7 +32,7 @@ def train_model(csv_path="tasks.csv", model_path="model.joblib"):
     ])
 
     # 4. Train model
-    model.fit(X, y)
+    model.fit(x, y)
 
     # 5. Save trained model
     joblib.dump(model, model_path)
